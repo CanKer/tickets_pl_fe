@@ -35,9 +35,9 @@ jobs:
 
     # CodeQL for automated code scanning and security analysis
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
 
     # Add any additional steps for deployment or further testing here
