@@ -7,7 +7,7 @@ import { ThemeProvider } from "./mtComponents";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Tickets app",
+  title: "Testing...",
   description: "",
 };
 export default function RootLayout({
