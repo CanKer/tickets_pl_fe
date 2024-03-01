@@ -1,0 +1,43 @@
+name: Tickets FE CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Run tests
+      run: npm test
+
+    - name: Lint
+      run: npx eslint .
+
+    - name: Check for Vulnerable Dependencies
+      run: npm audit
+
+    # CodeQL for automated code scanning and security analysis
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
+
+    # Add any additional steps for deployment or further testing here
