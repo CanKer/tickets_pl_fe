@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        security-events: write
 
     steps:
     - uses: actions/checkout@v4
@@ -36,6 +39,7 @@ jobs:
     # CodeQL for automated code scanning and security analysis
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
+
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
