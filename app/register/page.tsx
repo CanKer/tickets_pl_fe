@@ -1,22 +1,36 @@
 "use client";
-import Button from "@material-tailwind/react/components/Button";
-import { validationSchema } from "./schema";
-import { useFormik } from "formik";
-import Input from "@material-tailwind/react/components/Input";
-import Typography from "@material-tailwind/react/components/Typography";
+import { useFormState } from "react-dom";
 import concert from "../../public/concert.jpg";
+import { createUser } from "../actions";
+import { Input, Typography, Button } from "../mtComponents";
+import { useForm } from "react-hook-form";
+import { useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
+import { toast } from "react-toastify";
+
+const initialState = {
+  error: "",
+};
 
 export default function Page() {
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+  const [state, formAction] = useFormState(createUser, initialState);
+  const { pending } = useFormStatus();
+
+  const formRef = useRef();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = () => {
+    formAction(new FormData(formRef.current));
+  };
+
+  useEffect(() => {
+    if (state.error) {
+      toast.error(state.error);
+    }
+  }, [state.error]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 h-[100%]">
@@ -43,32 +57,49 @@ export default function Page() {
           </a>
         </Typography>
 
-        <form onSubmit={formik.handleSubmit}>
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6">
             <Input
               variant="outlined"
               label="Email"
               id="email"
-              type="email"
-              value={formik.values.email}
-              required
-              onChange={formik.handleChange}
               crossOrigin=""
+              {...register("email", {
+                required: true,
+                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+              })}
             />
+            {errors.email && errors.email.type === "required" && (
+              <p className="text-xs text-red-500">This is required</p>
+            )}
+            {errors.email && errors.email.type === "pattern" && (
+              <p className="text-xs text-red-500">Wrong format</p>
+            )}
           </div>
           <div className="mb-12">
             <Input
               variant="outlined"
               label="Password"
-              id="password"
               type="password"
-              value={formik.values.password}
-              required
-              onChange={formik.handleChange}
+              id="password"
               crossOrigin=""
+              {...register("password", { required: true, minLength: 6 })}
             />
+            {errors.password && errors.password.type === "required" && (
+              <p className="text-xs text-red-500">This is required</p>
+            )}
+            {errors.password && errors.password.type === "minLength" && (
+              <p className="text-xs text-red-500">
+                Password must be 6 or more characters long
+              </p>
+            )}
           </div>
-          <Button placeholder="Sign up" fullWidth type="submit">
+          <Button
+            placeholder="Sign up"
+            fullWidth
+            type="submit"
+            disabled={pending}
+          >
             Sign up
           </Button>
         </form>

@@ -1,25 +1,10 @@
 "use client";
-import Button from "@material-tailwind/react/components/Button";
-import { validationSchema } from "../register/schema";
-import { useFormik } from "formik";
-import Input from "@material-tailwind/react/components/Input";
-import Typography from "@material-tailwind/react/components/Typography";
 import Sidebar from "../components/sidebar";
 import { useState } from "react";
+import { Typography } from "../mtComponents";
 
 export default function Page() {
   const [collapse, setCollapse] = useState(false);
-
-  const formik = useFormik({
-    initialValues: {
-      email: "annakowalska@gmail.com",
-      password: "123456",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
 
   return (
     <>
@@ -39,35 +24,6 @@ export default function Page() {
           >
             Update your profile
           </Typography>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="mb-6">
-              <Input
-                variant="outlined"
-                label="Email"
-                id="email"
-                type="email"
-                value={formik.values.email}
-                required
-                onChange={formik.handleChange}
-                crossOrigin=""
-              />
-            </div>
-            <div className="mb-12">
-              <Input
-                variant="outlined"
-                label="Password"
-                id="password"
-                type="password"
-                value={formik.values.password}
-                required
-                onChange={formik.handleChange}
-                crossOrigin=""
-              />
-            </div>
-            <Button placeholder="Save" fullWidth type="submit">
-              Save
-            </Button>
-          </form>
         </div>
       </div>
     </>
