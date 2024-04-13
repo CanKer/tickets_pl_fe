@@ -4,7 +4,7 @@ import concert from "../../public/concert.jpg";
 import { createUser } from "../actions";
 import { Input, Typography, Button } from "../mtComponents";
 import { useForm } from "react-hook-form";
-import { useEffect, useRef } from "react";
+import { LegacyRef, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "react-toastify";
 
@@ -20,17 +20,19 @@ export default function Page() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = () => {
-    formAction(new FormData(formRef.current));
+    formAction(new FormData(formRef?.current));
+    reset();
   };
 
   useEffect(() => {
     if (state.error) {
       toast.error(state.error);
     }
-  }, [state.error]);
+  }, [state]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 h-[100%]">
